@@ -1,93 +1,87 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
+      <v-card color="blue-grey lighten-5">
+        <v-img
+          class="ma-5"
+          aspect-ratio="4.3"
+          lazy-src="/gnat-hardware.png"
+          src="/gnat-hardware.png"
+        >
+          <template v-slot:placeholder>
+            <v-row class="fill-height ma-0" align="center" justify="center">
+              <v-progress-circular
+                indeterminate
+                color="black"
+              ></v-progress-circular>
+            </v-row>
+          </template>
+        </v-img>
         <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
+          <v-card
+            v-for="(iface, index) in networkInterfaces"
+            :key="iface.id"
+            :class="index > 0 ? 'mt-3' : null"
+            flat
           >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
+            <v-list>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title class="headline">{{
+                    iface.name
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle>{{
+                    'mtu: ' + iface.mtu
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-icon
+                    :color="iface.state !== 'UP' ? 'orange' : 'primary'"
+                    v-text="getStatusIcon(iface.state)"
+                  ></v-icon>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
+            <v-card-text
+              v-if="iface.ipAddresses && iface.ipAddresses.length > 0"
+              class="pt-0"
+            >
+              <v-card flat>
+                <v-list class="blue-grey lighten-4" dense>
+                  <v-list-item
+                    v-for="address in iface.ipAddresses"
+                    :key="address"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>{{ address }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-card-text>
+          </v-card>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
-        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
+import graphql from '~/graphql'
 export default {
-  components: {
-    Logo,
-    VuetifyLogo,
+  methods: {
+    getStatusIcon(status) {
+      if (status === 'UP') {
+        return 'mdi-lan-check'
+      } else {
+        return 'mdi-lan-disconnect'
+      }
+    },
+  },
+  apollo: {
+    networkInterfaces: {
+      query: graphql.query.networkInterfaces,
+    },
   },
 }
 </script>
