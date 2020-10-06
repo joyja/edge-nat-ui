@@ -60,7 +60,10 @@
               </v-card>
             </v-card-text>
             <v-card-actions>
-              <v-dialog max-width="500px">
+              <v-dialog
+                v-model="configs[iface.config].showDialog"
+                max-width="500px"
+              >
                 <v-form>
                   <v-card>
                     <v-card-title>{{ iface.name }} Configuration</v-card-title>
@@ -229,6 +232,7 @@ export default {
           this.configs[configIndex].addresses = null
         }
       })
+      this.configs[configIndex].showDialog = false
     },
   },
   apollo: {

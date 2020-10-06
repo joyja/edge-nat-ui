@@ -55,18 +55,18 @@ export default {
         {
           icon: 'mdi-network',
           title: 'Interfaces',
-          //   to: '/',
+          to: '/',
         },
         {
           icon: 'mdi-shuffle',
           title: 'NAT',
-          //   to: '/inspire',
+          to: '/nat',
         },
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'gnat',
+      title: 'NE1',
     }
   },
 }
