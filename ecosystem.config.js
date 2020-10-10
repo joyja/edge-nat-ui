@@ -15,7 +15,7 @@ module.exports = {
       host: 'localhost',
       ref: 'origin/main',
       repo: 'https://github.com/joyja/edge-nat-ui.git',
-      path: 'home/ubuntu/edge-nat-ui',
+      path: '/root/edge-nat-ui',
       'post-deploy':
         'npm install && pm2 startOrRestart ecosystem.config.js --env production',
     },
