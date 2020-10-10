@@ -61,6 +61,7 @@
             </v-card-text>
             <v-card-actions>
               <v-dialog
+                v-if="configs[iface.config]"
                 v-model="configs[iface.config].showDialog"
                 max-width="500px"
               >
