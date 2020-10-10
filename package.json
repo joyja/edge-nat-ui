@@ -16,6 +16,8 @@
     "@nuxtjs/apollo": "^4.0.1-rc.3",
     "core-js": "^3.6.5",
     "ip": "^1.1.5",
+    "is-cidr": "^4.0.2",
+    "is-ip": "^3.1.0",
     "nuxt": "^2.14.5"
   },
   "devDependencies": {

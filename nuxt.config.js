@@ -1,6 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  env: {
+    eth1name: process.env.ETH1NAME,
+    eth2name: process.env.ETH2NAME,
+  },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s - edge-nat-ui',

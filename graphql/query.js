@@ -1,6 +1,15 @@
 import gql from 'graphql-tag'
 import fragment from './fragment'
 
+const natRules = gql`
+  query NatRules {
+    natRules {
+      ...NatRuleBasic
+    }
+  }
+  ${fragment.natRule}
+`
+
 const networkInterfaceConfigs = gql`
   query NetworkInterfaceConfigs {
     networkInterfaceConfigs {
@@ -20,6 +29,7 @@ const networkInterfaces = gql`
 `
 
 export default {
+  natRules,
   networkInterfaces,
   networkInterfaceConfigs,
 }

@@ -28,7 +28,7 @@
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="headline">{{
-                    iface.name
+                    iface.alias
                   }}</v-list-item-title>
                   <v-list-item-subtitle>{{
                     'mtu: ' + iface.mtu
@@ -126,7 +126,12 @@
                       </v-expand-transition>
                     </v-card-text>
                     <v-card-actions>
-                      <v-btn class="flex-grow-1" color="primary">apply</v-btn>
+                      <v-btn
+                        class="flex-grow-1"
+                        color="primary"
+                        @click="setInterfaceConfig(iface.config)"
+                        >apply</v-btn
+                      >
                       <v-btn
                         class="flex-grow-1"
                         color="primary"
@@ -183,6 +188,7 @@ export default {
       configs: networkInterfaceConfigs.map((config) => {
         return {
           ...config,
+          addresses: config.addresses ? config.addresses : [],
           showDialog: false,
           addAddress: '',
         }
@@ -233,6 +239,27 @@ export default {
         }
       })
       this.configs[configIndex].showDialog = false
+    },
+    async setInterfaceConfig(configIndex) {
+      await this.$apollo.mutate({
+        mutation: graphql.mutation.setInterfaceConfig,
+        variables: {
+          name: this.configs[configIndex].name,
+          dhcp: this.configs[configIndex].dhcp4,
+          gateway: this.configs[configIndex].gateway4,
+          addresses: this.configs[configIndex].addresses,
+        },
+      })
+      await this.$apollo.queries.networkInterfaces.refetch()
+      await this.$apollo.queries.networkInterfaceConfigs.refetch()
+      this.configs = this.networkInterfaceConfigs.map((config) => {
+        return {
+          ...config,
+          addresses: config.addresses ? config.addresses : [],
+          showDialog: false,
+          addAddress: '',
+        }
+      })
     },
   },
   apollo: {
