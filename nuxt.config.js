@@ -2,13 +2,17 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   telemetry: true,
-  server: {
-    port: 3000, // default: 3000
-    host: '0.0.0.0', // default: localhost
-  },
   env: {
     eth1name: process.env.ETH1NAME,
     eth2name: process.env.ETH2NAME,
+    tentacleServerSecure: process.env.TENTACLE_SERVER_SECURE || false,
+    tentacleServerHost: process.env.TENTACLE_SERVER_HOST,
+    tentacleServerPort: process.env.TENTACLE_SERVER_PORT || 4000,
+    tentacleServerUrl: process.env.TENTACLE_SERVER_URL,
+    tentacleClientSecure: process.env.TENTACLE_CLIENT_SECURE || false,
+    tentacleClientHost: process.env.TENTACLE_CLIENT_HOST,
+    tentacleClientPort: process.env.TENTACLE_CLIENT_PORT,
+    tentacleClientUrl: process.env.TENTACLE_CLIENT_URL,
   },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
