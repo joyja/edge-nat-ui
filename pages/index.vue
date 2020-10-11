@@ -26,13 +26,16 @@
           >
             <v-list>
               <v-list-item>
-                <v-list-item-content>
+                <v-list-item-content class="text-uppercase">
                   <v-list-item-title class="headline">{{
                     iface.alias
                   }}</v-list-item-title>
-                  <v-list-item-subtitle>{{
-                    'mtu: ' + iface.mtu
-                  }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="d-flex justify-space-between"
+                    ><div><strong>mac: </strong>{{ iface.macAddress }}</div>
+                    <div>
+                      <strong> mtu: </strong>{{ iface.mtu }}
+                    </div></v-list-item-subtitle
+                  >
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-icon

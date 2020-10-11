@@ -27,6 +27,7 @@ const networkInterface = gql`
     mtu
     state
     ipAddresses
+    macAddress
   }
 `
 
