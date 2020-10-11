@@ -5,14 +5,14 @@ export default {
   env: {
     eth1name: process.env.ETH1NAME,
     eth2name: process.env.ETH2NAME,
-    tentacleServerSecure: process.env.TENTACLE_SERVER_SECURE || false,
-    tentacleServerHost: process.env.TENTACLE_SERVER_HOST,
-    tentacleServerPort: process.env.TENTACLE_SERVER_PORT || 4000,
-    tentacleServerUrl: process.env.TENTACLE_SERVER_URL,
-    tentacleClientSecure: process.env.TENTACLE_CLIENT_SECURE || false,
-    tentacleClientHost: process.env.TENTACLE_CLIENT_HOST,
-    tentacleClientPort: process.env.TENTACLE_CLIENT_PORT,
-    tentacleClientUrl: process.env.TENTACLE_CLIENT_URL,
+    edgenatServerSecure: process.env.EDGENAT_SERVER_SECURE || false,
+    edgenatServerHost: process.env.EDGENAT_SERVER_HOST,
+    edgenatServerPort: process.env.EDGENAT_SERVER_PORT || 4000,
+    edgenatServerUrl: process.env.EDGENAT_SERVER_URL,
+    edgenatClientSecure: process.env.EDGENAT_CLIENT_SECURE || false,
+    edgenatClientHost: process.env.EDGENAT_CLIENT_HOST,
+    edgenatClientPort: process.env.EDGENAT_CLIENT_PORT,
+    edgenatClientUrl: process.env.EDGENAT_CLIENT_URL,
   },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {

@@ -11,19 +11,19 @@ export default function (context) {
   let config = {}
   if (process.client) {
     config = {
-      httpPrefix: process.env.tentacleClientSecure ? 'https' : 'http',
-      wsPrefix: process.env.tentacleClientSecure ? 'wss' : 'ws',
-      hostname: process.env.tentacleClientHost || window.location.hostname,
-      port: process.env.tentacleClientPort || window.location.port,
-      url: process.env.tentacleClientUrl || '/api/',
+      httpPrefix: process.env.edgenatClientSecure ? 'https' : 'http',
+      wsPrefix: process.env.edgenatClientSecure ? 'wss' : 'ws',
+      hostname: process.env.edgenatClientHost || window.location.hostname,
+      port: process.env.edgenatClientPort || window.location.port,
+      url: process.env.edgenatClientUrl || '/api/',
     }
   } else {
     config = {
-      httpPrefix: process.env.tentacleServerSecure ? 'https' : 'http',
-      wsPrefix: process.env.tentacleServerSecure ? 'wss' : 'ws',
-      hostname: process.env.tentacleServerHost || 'localhost',
-      port: process.env.tentacleServerPort || 4000,
-      url: process.env.tentacleServerUrl || '/',
+      httpPrefix: process.env.edgenatServerSecure ? 'https' : 'http',
+      wsPrefix: process.env.edgenatServerSecure ? 'wss' : 'ws',
+      hostname: process.env.edgenatServerHost || 'localhost',
+      port: process.env.edgenatServerPort || 4000,
+      url: process.env.edgenatServerUrl || '/',
     }
   }
   const portString = config.port ? `:${config.port}` : ``
