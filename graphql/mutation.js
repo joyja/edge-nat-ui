@@ -46,8 +46,18 @@ const deleteRule = gql`
   ${fragment.natRule}
 `
 
+const deployUpdate = gql`
+  mutation DeployUpdate {
+    deployUpdate {
+      ...DeployUpdateStatusBasic
+    }
+  }
+  ${fragment.deployUpdateStatus}
+`
+
 export default {
   createRule,
   deleteRule,
   setInterfaceConfig,
+  deployUpdate,
 }

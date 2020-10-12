@@ -28,8 +28,18 @@ const networkInterfaces = gql`
   ${fragment.networkInterface}
 `
 
+const deployUpdateStatus = gql`
+  query deployUpdateStatus {
+    deployUpdateStatus {
+      ...DeployUpdateStatusBasic
+    }
+  }
+  ${fragment.deployUpdateStatus}
+`
+
 export default {
   natRules,
   networkInterfaces,
   networkInterfaceConfigs,
+  deployUpdateStatus,
 }

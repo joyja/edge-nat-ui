@@ -31,8 +31,17 @@ const networkInterface = gql`
   }
 `
 
+const deployUpdateStatus = gql`
+  fragment DeployUpdateStatusBasic on DeployUpdateStatus {
+    progress
+    lastUpdateAt
+    error
+  }
+`
+
 export default {
   natRule,
   networkInterface,
   networkInterfaceConfig,
+  deployUpdateStatus,
 }

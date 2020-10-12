@@ -62,6 +62,11 @@ export default {
           title: 'NAT',
           to: '/nat',
         },
+        {
+          icon: 'mdi-update',
+          title: 'Software Updates',
+          to: '/update',
+        },
       ],
       miniVariant: false,
       right: true,
