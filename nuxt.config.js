@@ -13,6 +13,16 @@ export default {
     edgenatClientHost: process.env.EDGENAT_CLIENT_HOST,
     edgenatClientPort: process.env.EDGENAT_CLIENT_PORT,
     edgenatClientUrl: process.env.EDGENAT_CLIENT_URL,
+    edgenatDeployServerSecure:
+      process.env.EDGENAT_DEPLOY_SERVER_SECURE || false,
+    edgenatDeployServerHost: process.env.EDGENAT_DEPLOY_SERVER_HOST,
+    edgenatDeployServerPort: process.env.EDGENAT_DEPLOY_SERVER_PORT || 4001,
+    edgenatDeployServerUrl: process.env.EDGENAT_DEPLOY_SERVER_URL,
+    edgenatDeployClientSecure:
+      process.env.EDGENAT_DEPLOY_CLIENT_SECURE || false,
+    edgenatDeployClientHost: process.env.EDGENAT_DEPLOY_CLIENT_HOST,
+    edgenatDeployClientPort: process.env.EDGENAT_DEPLOY_CLIENT_PORT,
+    edgenatDeployClientUrl: process.env.EDGENAT_DEPLOY_CLIENT_URL,
   },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -53,6 +63,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: '~/plugins/apollo-config.js',
+      deploy: '~/plugins/apollo-config-deploy.js',
     },
   },
 

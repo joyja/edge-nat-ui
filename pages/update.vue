@@ -29,7 +29,7 @@ import graphql from '~/graphql'
 export default {
   async asyncData({ app }) {
     const provider = app.apolloProvider
-    const client = provider.defaultClient
+    const client = provider.clients.deploy
     let error = null
     const deployUpdateStatus = await client
       .query({
@@ -67,6 +67,7 @@ export default {
     },
   },
   apollo: {
+    $client: 'deploy',
     deployUpdateStatus: {
       query: graphql.query.deployUpdateStatus,
       subscribeToMore: {
@@ -85,15 +86,6 @@ export default {
         },
       },
     },
-    // $subscribe: {
-    //   deployUpdateStatus: {
-    //     query: graphql.subscription.deployUpdateStatus,
-    //     result({ data }) {
-    //       this.deployUpdateStatus =
-    //         this.deployUpdateStatus + data.deployUpdateStatus
-    //     },
-    //   },
-    // },
   },
 }
 </script>
