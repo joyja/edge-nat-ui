@@ -62,7 +62,7 @@
                 </v-list>
               </v-card>
             </v-card-text>
-            <v-card-actions>
+            <v-card-actions class="mx-4 pt-0 px-0 pb-4">
               <v-dialog
                 v-if="configs[iface.config]"
                 v-model="configs[iface.config].showDialog"
@@ -78,50 +78,90 @@
                       ></v-checkbox>
                       <v-expand-transition>
                         <div v-if="!configs[iface.config].dhcp4">
-                          <v-card flat dense class="mb-3">
-                            <v-list color="blue-grey lighten-4" dense>
+                          <v-card
+                            color="blue-grey lighten-4"
+                            flat
+                            dense
+                            class="mb-3 pb-3"
+                          >
+                            <v-list dense color="blue-grey lighten-4">
                               <v-subheader>Addresses</v-subheader>
-                              <v-list-item
-                                v-for="(address, addressIndex) in configs[
-                                  iface.config
-                                ].addresses"
-                                :key="addressIndex"
-                              >
-                                <v-list-item-content>{{
-                                  address
-                                }}</v-list-item-content>
-                                <v-list-item-action>
-                                  <v-btn
-                                    color="primary"
-                                    icon
-                                    @click="
-                                      configs[iface.config].addresses.splice(
-                                        addressIndex,
-                                        1
-                                      )
-                                    "
-                                    ><v-icon>mdi-delete</v-icon></v-btn
-                                  >
-                                </v-list-item-action>
-                              </v-list-item>
+                              <v-scroll-y-transition group>
+                                <v-list-item
+                                  v-for="(address, addressIndex) in configs[
+                                    iface.config
+                                  ].addresses"
+                                  :key="addressIndex"
+                                >
+                                  <v-list-item-content>{{
+                                    address
+                                  }}</v-list-item-content>
+                                  <v-list-item-action>
+                                    <v-btn
+                                      color="primary"
+                                      icon
+                                      @click="
+                                        configs[iface.config].addresses.splice(
+                                          addressIndex,
+                                          1
+                                        )
+                                      "
+                                      ><v-icon>mdi-delete</v-icon></v-btn
+                                    >
+                                  </v-list-item-action>
+                                </v-list-item>
+                              </v-scroll-y-transition>
                             </v-list>
+                            <v-slide-y-transition mode="out-in">
+                              <v-card-actions
+                                v-if="showAddIPAddress"
+                                key="addIPAddressForm"
+                                class="py-0 px-3 d-flex align-center"
+                              >
+                                <v-text-field
+                                  v-model="configs[iface.config].addAddress"
+                                  class="flex-grow-1 pt-1 mr-3"
+                                  label="New Address"
+                                  dense
+                                ></v-text-field>
+                                <v-btn
+                                  dark
+                                  fab
+                                  small
+                                  color="primary"
+                                  elevation="1"
+                                  @click="
+                                    configs[iface.config].addresses.push(
+                                      configs[iface.config].addAddress
+                                    )
+                                  "
+                                  ><v-icon dark>mdi-plus</v-icon></v-btn
+                                >
+                                <v-btn
+                                  color="primary"
+                                  elevation="1"
+                                  dark
+                                  fab
+                                  small
+                                  @click="showAddIPAddress = false"
+                                  ><v-icon dark>mdi-close</v-icon></v-btn
+                                >
+                              </v-card-actions>
+                              <v-card-actions
+                                v-else
+                                key="addIPAddressButton"
+                                class="mx-3"
+                              >
+                                <v-btn
+                                  block
+                                  color="primary"
+                                  @click="showAddIPAddress = true"
+                                  ><v-icon left>mdi-plus</v-icon>Add ip
+                                  address</v-btn
+                                >
+                              </v-card-actions>
+                            </v-slide-y-transition>
                           </v-card>
-                          <div class="d-flex align-center">
-                            <v-text-field
-                              v-model="configs[iface.config].addAddress"
-                              label="New Address"
-                            ></v-text-field>
-                            <v-btn
-                              color="primary"
-                              icon
-                              @click="
-                                configs[iface.config].addresses.push(
-                                  configs[iface.config].addAddress
-                                )
-                              "
-                              ><v-icon>mdi-plus</v-icon></v-btn
-                            >
-                          </div>
                           <v-text-field
                             v-model="configs[iface.config].gateway4"
                             label="Gateway"
@@ -161,6 +201,7 @@
 
 <script>
 import graphql from '~/graphql'
+
 export default {
   async asyncData({ app, params }) {
     const provider = app.apolloProvider
@@ -206,6 +247,7 @@ export default {
       networkInterfaceConfigs: [],
       configs: [],
       error: null,
+      showAddIPAddress: false,
     }
   },
   computed: {
