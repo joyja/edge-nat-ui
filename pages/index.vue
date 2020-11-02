@@ -147,7 +147,7 @@
                                     label="Subnet Mask"
                                   ></v-autocomplete>
                                   <v-btn
-                                    dark
+                                    :dark="addIPAddressValid"
                                     fab
                                     x-small
                                     color="primary"
