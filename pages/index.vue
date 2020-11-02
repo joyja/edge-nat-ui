@@ -27,7 +27,7 @@
             <v-list two-line dense>
               <v-list-item>
                 <v-list-item-content class="text-uppercase">
-                  <v-list-item-title class="headline">{{
+                  <v-list-item-title class="headline pt-1">{{
                     iface.alias
                   }}</v-list-item-title>
                   <v-list-item-subtitle class="d-flex justify-space-between"
