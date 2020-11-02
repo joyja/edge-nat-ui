@@ -270,7 +270,10 @@ export default {
       networkInterfaceConfigs: [],
       configs: [],
       error: null,
-      gatewayRules: [(v) => isIp(v) || 'Must enter a valid IP address.'],
+      gatewayRules: [
+        (v) =>
+          v ? isIp(v) || 'Must enter a valid IP address or nothing.' : true,
+      ],
       updateConfigurationValid: false,
       ipAddressRules: [(v) => isIp(v) || 'Must enter a valid IP address.'],
       subnetMaskRules: [(v) => !!v || 'Must select a valid subnet.'],
