@@ -24,7 +24,7 @@
             :class="index > 0 ? 'mt-3' : null"
             flat
           >
-            <v-list>
+            <v-list two-line dense>
               <v-list-item>
                 <v-list-item-content class="text-uppercase">
                   <v-list-item-title class="headline">{{
@@ -56,7 +56,12 @@
                     :key="address"
                   >
                     <v-list-item-content>
-                      <v-list-item-title>{{ address }}</v-list-item-title>
+                      <v-list-item-title>{{
+                        getIPAddressText(address)
+                      }}</v-list-item-title>
+                      <v-list-item-subtitle>{{
+                        getSubnetMaskText(address)
+                      }}</v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list>
@@ -68,7 +73,7 @@
                 v-model="configs[iface.config].showDialog"
                 max-width="500px"
               >
-                <v-form>
+                <v-form v-model="updateConfigurationValid">
                   <v-card>
                     <v-card-title>{{ iface.name }} Configuration</v-card-title>
                     <v-card-text>
@@ -84,7 +89,7 @@
                             dense
                             class="mb-3 pb-3"
                           >
-                            <v-list dense color="blue-grey lighten-4">
+                            <v-list two-line dense color="blue-grey lighten-4">
                               <v-subheader>Addresses</v-subheader>
                               <v-scroll-y-transition group>
                                 <v-list-item
@@ -93,9 +98,14 @@
                                   ].addresses"
                                   :key="addressIndex"
                                 >
-                                  <v-list-item-content>{{
-                                    address
-                                  }}</v-list-item-content>
+                                  <v-list-item-content>
+                                    <v-list-item-title>{{
+                                      getIPAddressText(address)
+                                    }}</v-list-item-title>
+                                    <v-list-item-subtitle>{{
+                                      getSubnetMaskText(address)
+                                    }}</v-list-item-subtitle>
+                                  </v-list-item-content>
                                   <v-list-item-action>
                                     <v-btn
                                       color="primary"
@@ -112,59 +122,70 @@
                                 </v-list-item>
                               </v-scroll-y-transition>
                             </v-list>
-                            <v-slide-y-transition mode="out-in">
-                              <v-card-actions
-                                v-if="showAddIPAddress"
-                                key="addIPAddressForm"
-                                class="py-0 px-3 d-flex align-center"
-                              >
-                                <v-text-field
-                                  v-model="configs[iface.config].addAddress"
-                                  class="flex-grow-1 pt-1 mr-3"
-                                  label="New Address"
-                                  dense
-                                ></v-text-field>
-                                <v-btn
-                                  dark
-                                  fab
-                                  small
-                                  color="primary"
-                                  elevation="1"
-                                  @click="
-                                    configs[iface.config].addresses.push(
-                                      configs[iface.config].addAddress
-                                    )
-                                  "
-                                  ><v-icon dark>mdi-plus</v-icon></v-btn
+                            <v-form v-model="addIPAddressValid">
+                              <v-slide-y-transition mode="out-in">
+                                <v-card-actions
+                                  v-if="showAddIPAddress"
+                                  key="addIPAddressForm"
+                                  class="pb-0 pt-1 px-3 d-flex align-center"
                                 >
-                                <v-btn
-                                  color="primary"
-                                  elevation="1"
-                                  dark
-                                  fab
-                                  small
-                                  @click="showAddIPAddress = false"
-                                  ><v-icon dark>mdi-close</v-icon></v-btn
+                                  <v-text-field
+                                    v-model="configs[iface.config].addAddress"
+                                    class="flex-grow-1 mr-3"
+                                    label="New Address"
+                                    dense
+                                    :rules="ipAddressRules"
+                                  ></v-text-field>
+                                  <v-autocomplete
+                                    v-model="
+                                      configs[iface.config].addAddressSubnetMask
+                                    "
+                                    class="flex-grow-1 mr-3"
+                                    :items="subnetMasks"
+                                    dense
+                                    :rules="subnetMaskRules"
+                                    label="Subnet Mask"
+                                  ></v-autocomplete>
+                                  <v-btn
+                                    dark
+                                    fab
+                                    x-small
+                                    color="primary"
+                                    elevation="1"
+                                    :disabled="!addIPAddressValid"
+                                    @click="addIPAddress(iface.config)"
+                                    ><v-icon dark>mdi-plus</v-icon></v-btn
+                                  >
+                                  <v-btn
+                                    color="primary"
+                                    elevation="1"
+                                    dark
+                                    fab
+                                    x-small
+                                    @click="showAddIPAddress = false"
+                                    ><v-icon dark>mdi-close</v-icon></v-btn
+                                  >
+                                </v-card-actions>
+                                <v-card-actions
+                                  v-else
+                                  key="addIPAddressButton"
+                                  class="mx-3"
                                 >
-                              </v-card-actions>
-                              <v-card-actions
-                                v-else
-                                key="addIPAddressButton"
-                                class="mx-3"
-                              >
-                                <v-btn
-                                  block
-                                  color="primary"
-                                  @click="showAddIPAddress = true"
-                                  ><v-icon left>mdi-plus</v-icon>Add ip
-                                  address</v-btn
-                                >
-                              </v-card-actions>
-                            </v-slide-y-transition>
+                                  <v-btn
+                                    block
+                                    color="primary"
+                                    @click="showAddIPAddress = true"
+                                    ><v-icon left>mdi-plus</v-icon>Add ip
+                                    address</v-btn
+                                  >
+                                </v-card-actions>
+                              </v-slide-y-transition>
+                            </v-form>
                           </v-card>
                           <v-text-field
                             v-model="configs[iface.config].gateway4"
                             label="Gateway"
+                            :rules="gatewayRules"
                           />
                         </div>
                       </v-expand-transition>
@@ -173,6 +194,7 @@
                       <v-btn
                         class="flex-grow-1"
                         color="primary"
+                        :disabled="!updateConfigurationValid"
                         @click="setInterfaceConfig(iface.config)"
                         >apply</v-btn
                       >
@@ -200,6 +222,7 @@
 </template>
 
 <script>
+import isIp from 'is-ip'
 import graphql from '~/graphql'
 
 export default {
@@ -247,7 +270,106 @@ export default {
       networkInterfaceConfigs: [],
       configs: [],
       error: null,
+      gatewayRules: [(v) => isIp(v) || 'Must enter a valid IP address.'],
+      updateConfigurationValid: false,
+      ipAddressRules: [(v) => isIp(v) || 'Must enter a valid IP address.'],
+      subnetMaskRules: [(v) => !!v || 'Must select a valid subnet.'],
       showAddIPAddress: false,
+      addIPAddressValid: false,
+      subnetMasks: [
+        {
+          text: '/30 255.255.255.252',
+          value: '/30',
+        },
+        {
+          text: '/29 255.255.255.248',
+          value: '/29',
+        },
+        {
+          text: '/28 255.255.255.240',
+          value: '/28',
+        },
+        {
+          text: '/27 255.255.255.224',
+          value: '/27',
+        },
+        {
+          text: '/26 255.255.255.192',
+          value: '/26',
+        },
+        {
+          text: '/25 255.255.255.128',
+          value: '/25',
+        },
+        {
+          text: '/24 255.255.255.0',
+          value: '/24',
+        },
+        {
+          text: '/23 255.255.254.0',
+          value: '/23',
+        },
+        {
+          text: '/22 255.255.252.0',
+          value: '/22',
+        },
+        {
+          text: '/21 255.255.248.0',
+          value: '/21',
+        },
+        {
+          text: '/20 255.255.240.0',
+          value: '/20',
+        },
+        {
+          text: '/19 255.255.224.0',
+          value: '/19',
+        },
+        {
+          text: '/18 255.255.192.0',
+          value: '/18',
+        },
+        {
+          text: '/17 255.255.128.0',
+          value: '/17',
+        },
+        {
+          text: '/16 255.255.0.0',
+          value: '/16',
+        },
+        {
+          text: '/15 255.254.0.0',
+          value: '/15',
+        },
+        {
+          text: '/14 255.252.0.0',
+          value: '/14',
+        },
+        {
+          text: '/13 255.248.0.0',
+          value: '/13',
+        },
+        {
+          text: '/12 255.240.0.0',
+          value: '/12',
+        },
+        {
+          text: '/11 255.224.0.0',
+          value: '/11',
+        },
+        {
+          text: '/10 255.192.0.0',
+          value: '/10',
+        },
+        {
+          text: '/9 255.128.0.0',
+          value: '/9',
+        },
+        {
+          text: '/8 255.0.0.0',
+          value: '/8',
+        },
+      ],
     }
   },
   computed: {
@@ -263,6 +385,29 @@ export default {
     },
   },
   methods: {
+    getAddressText(address) {
+      const parts = address.split('/')
+      const ipAddress = parts[0]
+      const cidr = parts[1]
+      const subnetMask = this.subnetMasks.find((mask) => {
+        return mask.value === `/${cidr}`
+      })
+      return `${ipAddress}${subnetMask.text}`
+    },
+    getIPAddressText(address) {
+      return address.split('/')[0]
+    },
+    getSubnetMaskText(address) {
+      const cidr = address.split('/')[1]
+      return this.subnetMasks.find((mask) => {
+        return mask.value === `/${cidr}`
+      }).text
+    },
+    addIPAddress(index) {
+      this.configs[index].addresses.push(
+        `${this.configs[index].addAddress}${this.configs[index].addAddressSubnetMask}`
+      )
+    },
     getStatusIcon(status) {
       if (status === 'UP') {
         return 'mdi-lan-check'
