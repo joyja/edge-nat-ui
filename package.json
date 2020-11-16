@@ -12,7 +12,7 @@
     "get-schema": "node ./getSchema.js"
   },
   "dependencies": {
-    "@nuxtjs/apollo": "^4.0.1-rc.3",
+    "@nuxtjs/apollo": "^4.0.1-rc.5",
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
     "ip": "^1.1.5",
